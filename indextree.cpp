@@ -87,15 +87,11 @@ class index_tree {
 		}
 };
 
+int exp(int n) {
+  cout << n << endl;
+  return n == 1 ? 1 : 1 + exp(exp(n-1));
+}
+
 int main() {
-	index_tree tree = index_tree(10);
-
-    int arr[] = {0,1,2,3,4,5,6,7,8,9,10};
-	tree.init(arr);
-
-	for (int i = 0; i < 10; i++) {
-		for (int j = i+1; j < 10; j++) {
-			cout << i << " " << j << " " << tree.sum(interval(i, j)) << endl;
-		}
-	}
+    exp(5);
 }
