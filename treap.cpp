@@ -95,12 +95,13 @@ struct treap {
 
         while (n->left != NULL || n->right != NULL) {
             parent = n;
-            if (n->left != NULL) {
-                n->rotateLeft();
-                n = n->left;
-            } else if(n->right != NULL) {
+
+            if (n->left != NULL && (n->right == NULL || n->left->priority > n->right->priority)) {
                 n->rotateLeft();
                 n = n->right;
+            } else if (n->right != NULL) {
+                n->rotateRight();
+                n = n->left;
             }
         }
 
