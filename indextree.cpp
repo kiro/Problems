@@ -6,9 +6,10 @@
 using namespace std;
 
 struct interval {
-    int from, to;
+    int from, to, mid;
 
-    interval(int from, int to) : from(from), to(to) {
+    interval() {}
+    interval(int from, int to) : from(from), to(to), mid( (from+to) / 2 ) {
     }
 
     bool contains(interval other) {
@@ -22,49 +23,62 @@ struct interval {
     bool contains(int value) {
         return from <= value && value <= to;
     }
+
+    bool is(int value) {
+        return from == value && to == value;
+    }
+};
+
+struct node {
+    int index;
+    interval range;
+
+    node() {}
+    node(int index, interval range) : index(index), range(range) {}
+
+    node left() {
+        return node(index * 2 + 1, interval(range.from, range.mid));
+    }
+    node right() {
+        return node(index * 2 + 2, interval(range.mid + 1, range.to));
+    }
 };
 
 class index_tree {
 	private:
-		int n;
-		vector<int> nodes;
+		node root;
+		vector<int> value;
 
-		int sum(int i, interval current, interval query) {
-            if (query.contains(current)) {
-				return nodes[i];
-			}
-			if (query.intersects(current)) {
-				int mid = (current.from + current.to) / 2;
-
-                return sum(i * 2 + 1, interval(current.from, mid), query) +
-                       sum(i * 2 + 2, interval(mid + 1, current.to), query);
+		int sum(node current, interval query) {
+            if (query.contains(current.range)) {
+				return value[current.index];
+			} else if (query.intersects(current.range)) {
+                return sum(current.left(), query) + sum(current.right(), query);
 			}
 			return 0;
 		}
 
-		int set(int i, interval current, int index, int value) {
-		    if (current.from == current.to && current.from == index) {
-                nodes[i] = value;
-		    } else if (current.contains(index)) {
-                int mid = (current.from + current.to) / 2;
-
-                nodes[i] = set(i * 2 + 1, interval(current.from, mid), index, value) +
-                           set(i * 2 + 2, interval(mid + 1, current.to), index, value);
+		int set(node current, int index, int newValue) {
+		    if (current.range.is(index)) {
+                value[current.index] = newValue;
+		    } else if (current.range.contains(index)) {
+                value[current.index] = set(current.left(), index, newValue) + set(current.right(), index, newValue);
             }
-
-            return nodes[i];
+            return value[current.index];
 		}
+
 	public:
-		index_tree(int n) : n(n) {
-			nodes = vector<int>(3 * n);
+		index_tree(int n) {
+			value = vector<int>(3 * n);
+			root = node(0, interval(0, n-1));
 		}
 
 		int sum(int from, int to) {
-			return sum(0, interval(0, n - 1), interval(from, to));
+			return sum(root, interval(from, to));
 		}
 
 		void set(int index, int value) {
-            set(0, interval(0, n - 1), index, value);
+            set(root, index, value);
 		}
 };
 
