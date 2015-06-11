@@ -75,7 +75,7 @@ struct index_tree {
         return sum(root, interval(from, to));
     }
 
-	void set(int index, int value) {
+    void set(int index, int value) {
         set(root, index, value);
     }
 };
