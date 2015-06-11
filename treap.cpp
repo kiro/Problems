@@ -49,9 +49,6 @@ struct treap {
     treap() : root(NULL) { }
 
     void insert(node **current, int value) {
-        if (*current != NULL) {
-            cout << (*current)->value << endl;
-        }
         if (*current == NULL) {
             (*current) = new node(value);
         } else {
@@ -74,7 +71,6 @@ struct treap {
 
     void insert(int value) {
         insert(&root, value);
-        cout << endl;
     }
 
     pair<node*, node*> find(node* parent, node *current, int value) {
