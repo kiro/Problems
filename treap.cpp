@@ -6,18 +6,18 @@
 using namespace std;
 
 struct node {
-	int value;
-	int priority;
-	node *left;
+    int value;
+    int priority;
+    node *left;
     node *right;
 
-	node(int value) : value(value), priority(rand()), left(NULL), right(NULL) {
-	}
+    node(int value) : value(value), priority(rand()), left(NULL), right(NULL) {
+    }
 
-	void rotateLeft() {
-	    node *leftLeft = left->left;
-	    node *leftRight = left->right;
-	    node *prevRight = right;
+    void rotateLeft() {
+        node *leftLeft = left->left;
+        node *leftRight = left->right;
+        node *prevRight = right;
 
         swap(value, left->value);
         swap(priority, left->priority);
@@ -26,21 +26,21 @@ struct node {
 
         right->right = prevRight;
         right->left = leftRight;
-	}
+    }
 
-	void rotateRight() {
-	    node *rightLeft = right->left;
-	    node *rightRight = right->right;
+    void rotateRight() {
+        node *rightLeft = right->left;
+        node *rightRight = right->right;
         node *prevLeft = left;
 
-	    swap(value, right->value);
-	    swap(priority, right->priority);
-	    left = right;
-	    right = rightRight;
+        swap(value, right->value);
+        swap(priority, right->priority);
+        left = right;
+        right = rightRight;
 
-	    left->left = prevLeft;
-	    left->right = rightLeft;
-	}
+        left->left = prevLeft;
+        left->right = rightLeft;
+    }
 };
 
 struct treap {
