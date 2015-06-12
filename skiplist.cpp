@@ -18,15 +18,17 @@ struct skiplist {
         first = new node(-1);
     }
 
-    void insert(node *current, node *newNode, int level) {
+    void insert(node *current, node *newNode, int level, int levelToAdd) {
         if (level < 0) return;
 
         if (current->next[level] == NULL || current->next[level]->value > newNode->value) {
-            newNode->next[level] = current->next[level];
-            current->next[level] = newNode;
-            insert(current, newNode, level - 1);
+        	if (level <= levelToAdd) {
+            	newNode->next[level] = current->next[level];
+            	current->next[level] = newNode;
+        	}
+            insert(current, newNode, level - 1, levelToAdd);
         } else {
-            insert(current->next[level], newNode, level);
+            insert(current->next[level], newNode, level, levelToAdd);
         }
     }
 
@@ -48,7 +50,9 @@ struct skiplist {
     void remove(node *current, node* n, int level) {
         if (level < 0) return;
 
-        if (current->next[level]->value == n->value) {
+        if (current->next[level] == NULL || current->next[level]->value > n->value) {
+            remove(current, n, level - 1);
+        } else if (current->next[level]->value == n->value) {
             current->next[level] = n->next[level];
             remove(current, n, level - 1);
         } else {
@@ -59,7 +63,14 @@ struct skiplist {
     void remove(int value) {
         node* valueNode = find(value);
         if (valueNode == NULL) return;
-        remove(first, valueNode, valueNode->next.size() - 1);
+
+        int highestLevel = first->next.size() - 1;
+        remove(first, valueNode, highestLevel);
+
+        if (first->next[highestLevel] == NULL) {
+        	first->next.erase(highestLevel);
+        }
+
         delete valueNode;
     }
 
@@ -67,10 +78,11 @@ struct skiplist {
         node* valueNode = find(value);
         if (valueNode != NULL) return;
 
-        int level = 0;
-        while (rand() % 2 == 1) level++;
+        int levelToAdd = 0;
+        while (rand() % 2 == 1) levelToAdd++;
 
-        insert(first, new node(value), level);
+        int highestLevel = max((int)first->next.size() - 1, levelToAdd);
+        insert(first, new node(value), highestLevel, levelToAdd);
     }
 
     void print(node *node, int level) {
