@@ -28,7 +28,7 @@ struct skiplist {
         } else {
             insert(current->next[level], newNode, level);
         }
-	}
+    }
 
     node * find(node *current, int value, int level) {
         if (level < 0) return NULL;
