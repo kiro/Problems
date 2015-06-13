@@ -94,12 +94,10 @@ struct point {
 
 struct twod_index_tree {
     node root;
-    vector<vector<int> > arr;
     vector<index_tree> value;
 
     twod_index_tree(int n, int m) {
         value = vector<index_tree>(3*n, index_tree(m));
-        arr = vector<vector<int> >(n, vector<int>(m));
         root = node(0, interval(0, n-1));
     }
 
@@ -112,17 +110,15 @@ struct twod_index_tree {
         return 0;
     }
 
-    void set(node current, point p, int diff) {
-        if (current.range.contains(p.x)) {
-            // add the diff to the current value
-            int v = value[current.index].sum(interval(p.y, p.y));
-            value[current.index].set(p.y, v + diff);
-
-            if (!current.range.is(p.x)) {
-                set(current.left(), p, diff);
-                set(current.right(), p, diff);
-            }
+    int set(node current, point p, int newValue) {
+        if (current.range.is(p.x)) {
+            value[current.index].set(p.y, newValue);
+        } else if (current.range.contains(p.x)) {
+            int v = set(current.left(), p, newValue) + set(current.right(), p, newValue);
+            value[current.index].set(p.y, v);
         }
+
+        return value[current.index].sum(interval(p.y, p.y));
     }
 
     int sum(rect range) {
@@ -130,10 +126,7 @@ struct twod_index_tree {
     }
 
     void set(point p, int value) {
-        int diff = value - arr[p.x][p.y];
-        arr[p.x][p.y] = value;
-
-        set(root, p, diff);
+        set(root, p, value);
     }
 };
 
@@ -165,6 +158,7 @@ int main() {
     	}
     }
 
+    vector<vector<int> > arr(n, vector<int>(n));
     twod_index_tree plane(n, n);
     // fill it randomly
     for (int i = 0; i < 2*n; i++) {
@@ -172,6 +166,7 @@ int main() {
             int x = rand() % n;
             int y = rand() % n;
             int value = rand() % n;
+            arr[x][y] = value;
             plane.set(point(x, y), value);
         }
     }
@@ -185,7 +180,7 @@ int main() {
                     int sum = 0;
                     for (int x = x0; x <= x1; x++) {
                         for (int y = y0; y <= y1; y++) {
-                            sum += plane.arr[x][y];
+                            sum += arr[x][y];
                         }
                     }
 
