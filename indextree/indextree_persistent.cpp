@@ -87,13 +87,6 @@ struct index_tree {
         result.root = set(root, index, value);;
         return result;
     }
-
-    void print(node *current, int depth) {
-        if (current != NULL) {
-            print(current->left, depth + 1);
-            print(current->right, depth + 1);
-        }
-    }
 };
 
 int main() {
