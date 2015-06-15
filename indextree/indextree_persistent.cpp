@@ -67,6 +67,7 @@ struct index_tree {
     }
 
     node* set(node *current, int index, int newValue) {
+        // construct new nodes if current changes 
         if (current->range.is(index)) {
             return new node(newValue, current->range, NULL, NULL);
         } else if (current->range.contains(index)) {
@@ -75,6 +76,7 @@ struct index_tree {
 
             return new node(left->value + right->value, current->range, left, right);
         }
+        // otherwise return the old node
         return current;
     }
 
