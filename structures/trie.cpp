@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdio>
+#include <map>
 
 using namespace std;
 
@@ -7,7 +8,7 @@ const int letters = 26;
 
 struct node {
     bool isEnd;
-    node* next[letters];
+    map<char, node*> next;
 };
 
 node *root = new node();
