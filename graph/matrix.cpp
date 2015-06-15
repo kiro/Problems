@@ -20,7 +20,7 @@ void output() {
 	}
 }
 
-int main() { 
+int main() {
 	cin >> n >> m;
 
 	for (int i = 0; i < m; i++) {
