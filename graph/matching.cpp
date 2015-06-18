@@ -35,9 +35,8 @@ void dfs(int u, int side) {
 			dfs(matched[u], !side);
 		}
 	} else {
-		for (int i = 0; i < edges[u].size(); i++) {
-			int v = edges[u][i];
-            dfs(v, !side);
+		for (int i = 0; i < edges[u].size(); i++) {			
+            dfs(edges[u][i], !side);
 		}
 	}
 	path.pop_back();
