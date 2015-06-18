@@ -19,7 +19,7 @@ void output() {
 
 int main() {
 	cin >> n >> m;
-	g = vector<vector<int> >(n);
+	g = vector< vector<int> >(n);
 
 	for (int i = 0; i < m; i++) {
 		int u, v;

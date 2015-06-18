@@ -22,7 +22,7 @@ void augment(vector<int> path) {
 }
 
 void dfs(int u, int side) {
-	if (pathFound) return;
+	if (pathFound || visited[u]) return;
 
 	visited[u] = true;
 	path.push_back(u);
@@ -37,14 +37,9 @@ void dfs(int u, int side) {
 	} else {
 		for (int i = 0; i < edges[u].size(); i++) {
 			int v = edges[u][i];
-
-			if (!visited[v]) {
-				dfs(v, !side);
-			}
+            dfs(v, !side);
 		}
 	}
-
-	visited[u] = false;
 	path.pop_back();
 }
 
@@ -52,6 +47,7 @@ void matching() {
     for (int u = 1; u <= n; u++) {
 		if (!matched[u]) {
 			pathFound = false;
+			memset(visited, 0, sizeof(visited));
 			dfs(u, 0);
 		}
 	}
