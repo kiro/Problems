@@ -36,14 +36,14 @@ void dfs(int u, int side) {
 		}
 	} else {
 		for (int i = 0; i < edges[u].size(); i++) {			
-            dfs(edges[u][i], !side);
+			dfs(edges[u][i], !side);
 		}
 	}
 	path.pop_back();
 }
 
 void matching() {
-    for (int u = 1; u <= n; u++) {
+	for (int u = 1; u <= n; u++) {
 		if (!matched[u]) {
 			pathFound = false;
 			memset(visited, 0, sizeof(visited));
@@ -51,13 +51,13 @@ void matching() {
 		}
 	}
 
-    int count = 0;
-    for (int i = 1; i <= n; i++) {
-        if (matched[i]) {
-            count++;
-        }
-    }
-    cout << count << endl;
+	int count = 0;
+	for (int i = 1; i <= n; i++) {
+		if (matched[i]) {
+			count++;
+		}
+	}
+	cout << count << endl;
 }
 
 int main() {
