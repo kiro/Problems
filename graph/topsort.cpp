@@ -1,24 +1,30 @@
-#include <iostream> 
+#include <iostream>
 #include <queue>
 
 using namespace std;
 
 int n, m;
-vector<vector<int>> g(1000);
+vector<vector<int> > g(1000);
 int in[1000];
 
 void topsort() {
 	queue<int> q;
 
+	for (int i = 0; i < n; i++) {
+        for (int j = 0; j < g[i].size(); j++) {
+            in[ g[i][j] ]++;
+        }
+	}
+
 	// add the tasks that don't have dependencies
 	for (int i = 0; i < n; i++)	{
-		in (in[i] == 0) {
+		if (in[i] == 0) {
 			q.push(i);
 		}
 	}
 
 	while (!q.empty()) {
-		int u = q.top();
+		int u = q.front();
 		q.pop();
 
 		cout << u << " ";
@@ -43,8 +49,18 @@ int main() {
 		cin >> u >> v;
 
 		g[u].push_back(v);
-		in[v]++;
 	}
 
 	topsort();
 }
+
+/**
+6 7
+0 5
+0 3
+1 0
+2 4
+2 5
+4 3
+5 4
+*/

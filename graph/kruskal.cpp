@@ -1,12 +1,15 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 struct setunion {
-	vector<int> parent(1000, 0);
-	vector<int> depth(1000, 1);
+	vector<int> parent;
+	vector<int> depth;
 
 	setunion() {
+        parent = vector<int>(1000);
+        depth = vector<int>(1000, 1);
 		for (int i = 0; i < 1000; i++) {
 			// each node is a separate set initially
 			parent[i] = i;
@@ -25,7 +28,7 @@ struct setunion {
 			i = p;
 		}
 
-		return p;
+		return r;
 	}
 
 	void merge(int i, int j) {
@@ -44,6 +47,8 @@ struct setunion {
 
 struct edge {
 	int u, v, c;
+
+	edge(int u, int v, int c) : u(u), v(v), c(c) {}
 };
 
 bool compare(edge left, edge right) {
@@ -63,7 +68,7 @@ void kruskal(vector<edge> edges) {
 		if (s.root(e.u) != s.root(e.v)) {
 			mst += e.c;
 			// use the edge somehow
-			s.merge(e.u, e.v);		
+			s.merge(e.u, e.v);
 		}
 	}
 
@@ -76,9 +81,11 @@ int main() {
 
 	vector<edge> edges;
 	for (int i = 0; i < m; i++) {
-		edge e;
-		cin >> e.u >> e.v >> e.c;
-		edges.push_back(e);
+		int u, v, c;
+		cin >> u >> v >> c;
+
+		edges.push_back(edge(u, v, c));
+		edges.push_back(edge(v, u, c));
 	}
 
 	kruskal(edges);

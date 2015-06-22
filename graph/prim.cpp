@@ -1,4 +1,5 @@
-#include <iostream> 
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -7,13 +8,13 @@ int g[1000][1000];
 
 void prim() {
 	vector<int> visited(1000, 0);
-	// add 0 the mst 
+	// add 0 the mst
 	visited[0] = 1;
 
 	int cost = 0;
 
 	// add n - 1 edges
-	for (int k = 0; k < n - 1; k++) {		
+	for (int k = 0; k < n - 1; k++) {
 		// find minimum edge that connects node in the mst with a node outside
 		int c = 10000, u, v;
 
@@ -37,8 +38,9 @@ void prim() {
 int main() {
 	cin >> n >> m;
 	for (int i = 0; i < m; i++) {
-		int u, v;
-		cin >> u >> v >> g[u][v];
+		int u, v, c;
+		cin >> u >> v >> c;
+		g[u][v] = g[v][u] = c;
 	}
 
 	prim();

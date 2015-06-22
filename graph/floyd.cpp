@@ -1,4 +1,4 @@
-#include <iostream> 
+#include <iostream>
 
 using namespace std;
 
@@ -23,9 +23,12 @@ int main() {
 	cin >> n >> m;
 
 	for (int i = 0; i < m; i++) {
-		int u, v;
-		cin >> u >> v >> g[u][v];
+		int u, v, c;
+		cin >> u >> v >> c;
+		g[u][v] = g[v][u] = c;
 	}
 
 	floyd();
+
+	cout << g[0][5] << endl;
 }
