@@ -21,10 +21,11 @@ vector<vector<long long>> closest;
 
 const long long INF = 1E15L; 
 
-long long hang(int p, int u, int c) {
+// returns the closest shop in the subtree with root u
+long long hang(int p, int u, int edgeCost) {
     parent[u].push_back(p);
-    cost[u].push_back(c);
-   
+    cost[u].push_back(edgeCost);
+    
     closest[u].push_back(shop[u] ? 0 : INF);
     for (auto e : g[u]) {
         auto [v, c] = e;
@@ -41,6 +42,10 @@ void binaryLift() {
             int u = parent[v][i-1];
             parent[v].push_back(parent[u][i-1]);
             cost[v].push_back(cost[v][i-1] + cost[u][i-1]);
+            // note closest[u][0] is the closest in the subtree with root u, while parent and cost
+            // are the parent and cost one level up. 
+            // closest[u][1] will be the closest shop starting from u one level up, closest[u][2] two levels
+            // up, closest[u][3] 4 levels up, closest[u][k] closest shop starting from u 2^(k-1) levels up. 
             closest[v].push_back( min(closest[v][i-1], cost[v][i-1] + closest[u][i-1] ));
         }
     }
@@ -137,13 +142,17 @@ int main() {
         int du = depth(u);
         int dv = depth(v);
         int dr = depth(r);
- 
+
+        // u is the deepest of the two nodes on the edge we want to remove    
         if (du < dv) {
             swap(u, v);
             swap(du, dv);
         }
 
         int ru = lca(r, u);
+        // if lca of node we start from and the deepest from the edge is the deepest, 
+        // that means that the path from r to root goes through the edge we want to remove
+        // and we can't escape.
         if (ru != u) {
             cout << "escaped" << endl;
         } else {
